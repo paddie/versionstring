@@ -93,6 +93,14 @@ func CompareVersions(left, right []int) int {
 	return 0
 }
 
+func MaxVersionString(lvs, rvs string) []int {
+
+	left := ParseVersionString(lvs)
+	right := ParseVersionString(rvs)
+
+	return MaxVersion(left, right)
+}
+
 func MaxVersion(left, right []int) []int {
 	// compare the version strings as long as is possible
 	min := min(len(left), len(right))
