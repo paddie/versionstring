@@ -93,6 +93,52 @@ func CompareVersions(left, right []int) int {
 	return 0
 }
 
+func MaxVersion(left, right []int) []int {
+	// compare the version strings as long as is possible
+	min := min(len(left), len(right))
+	for i := 0; i < min; i++ {
+		if left[i] == right[i] {
+			continue
+		}
+
+		if left[i] < right[i] {
+			return right
+		}
+		return left
+	}
+	// both versions are equal as far as we know
+	// - if they are of equal length => 0
+	if len(left) == len(right) {
+		return left
+	}
+	// Worst case
+	// - version string are of unequal length
+
+	// the longest of the version strings has to
+	// have just one value != 0 to win
+	// - Could be simplified with pointer
+	//   but it 
+	if len(left) < len(right) {
+		for i := min; i < len(right); i++ {
+			if right[i] != 0 {
+				return right
+			}
+		}
+
+		return left
+	} else {
+		for i := min; i < len(left); i++ {
+			if left[i] != 0 {
+				return left
+			}
+		}
+		return right
+	}
+
+	// enver happens
+	return left
+}
+
 func max(n, m int) int {
 	if n < m {
 		return m
