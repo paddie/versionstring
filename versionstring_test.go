@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-type TestComp struct {
-	in  string
-	exp int
-}
-
 type TestParse struct {
 	in  string
 	exp []int
@@ -35,6 +30,11 @@ func TestParseVersionString(t *testing.T) {
 
 		}
 	}
+}
+
+type TestComp struct {
+	in  string
+	exp int
 }
 
 func TestCompareToString(t *testing.T) {

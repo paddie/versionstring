@@ -5,6 +5,9 @@ import (
 	"strings"
 )
 
+// "1.02.3." => []int{1, 2, 3}
+// "1.2..3" => []int{1, 2, 3}
+// "1.00.2" => []int{1, 0, 2}
 func ParseVersionString(vs string) []int {
 	tmp := strings.Split(vs, ".")
 	arr := make([]int, 0, len(tmp))
@@ -21,11 +24,33 @@ func ParseVersionString(vs string) []int {
 }
 
 // 0 = equal, 1 = greater, -1 = smaller
-// for now: can only compare strings of equal length
+// "1.2.3", "1.2.3" => 0
+// "1.2.3", "1.1" => -1
+// "1.2.3", "1.3" => 1
+// "1.2.3", "1.2.4" => 1
+// "1.2.3", "1.2.2" => -1
+// "1.2.3", "1.2.2.2" => -1
+// "1.2.3", "1.2.3.0.0" => 0
+// "1.2.3", "1.2.3.2" => 1
+// "1.2.3", "1.2.3.2.4" => 1
 func CompareStrings(lvs, rvs string) int {
 	left := ParseVersionString(lvs)
 	right := ParseVersionString(rvs)
 
+	return CompareVersions(left, right)
+}
+
+// 0 = equal, 1 = greater, -1 = smaller
+// "1.2.3", "1.2.3" => 0
+// "1.2.3", "1.1" => -1
+// "1.2.3", "1.3" => 1
+// "1.2.3", "1.2.4" => 1
+// "1.2.3", "1.2.2" => -1
+// "1.2.3", "1.2.2.2" => -1
+// "1.2.3", "1.2.3.0.0" => 0
+// "1.2.3", "1.2.3.2" => 1
+// "1.2.3", "1.2.3.2.4" => 1
+func CompareVersions(left, right []int) int {
 	// compare the version strings as long as is possible
 	min := min(len(left), len(right))
 	for i := 0; i < min; i++ {
@@ -48,6 +73,8 @@ func CompareStrings(lvs, rvs string) int {
 
 	// the longest of the version strings has to
 	// have just one value != 0 to win
+	// - Could be simplified with pointer
+	//   but it 
 	if len(left) < len(right) {
 		for i := min; i < len(right); i++ {
 			if right[i] != 0 {
